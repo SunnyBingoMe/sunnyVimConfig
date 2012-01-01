@@ -1,0 +1,3 @@
+this is my own vim config
+.vimrc needs to be 'ln -s' to ~/
+
