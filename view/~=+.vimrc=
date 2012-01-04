@@ -115,42 +115,50 @@ setlocal nowrap
 setlocal wrapmargin=0
 11
 normal zc
-85
+98
 normal zo
-86
+99
 normal zc
-85
+98
 normal zc
-92
+105
 normal zo
-92
+105
 normal zc
-104
+117
 normal zo
-104
+117
 normal zc
-124
+137
 normal zo
-124
+137
 normal zc
-179
+192
 normal zo
-179
+192
 normal zc
-243
+256
 normal zc
-308
+321
 normal zo
-308
+321
 normal zc
-375
+388
 normal zc
-let s:l = 31 - ((10 * winheight(0) + 7) / 15)
+466
+normal zo
+467
+normal zo
+469
+normal zo
+466
+normal zc
+let s:l = 464 - ((9 * winheight(0) + 7) / 15)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-31
-normal! 0
+464
+normal! 01l
 lcd ~/
 let &so = s:so_save | let &siso = s:siso_save
 doautoall SessionLoadPost

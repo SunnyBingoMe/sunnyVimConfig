@@ -26,15 +26,15 @@ set helplang=en
 syntax enable
 syntax on
 "colorscheme tango
-"colorscheme desert
-colorscheme desertEx "only good for c/cpp, do NOT use for the other file tyeps.
+colorscheme desert
+"colorscheme desertEx "only good for c/cpp, do NOT use for the other file tyeps.
 set tabstop=4
 set backspace=2 "enable backspc
 set nu "// can not find the diff between 'nu!' and 'nu'
 "set novb "disable beep sound
 set vb t_vb=
-"set wrap "enable auto line wrap
-set nowrap "disable auto line wrap
+set wrap "enable auto line wrap
+"set nowrap "disable auto line wrap
 set linebreak "full-word wrap
 "set list "show escaped 制表符 //tabs is shown: ^I => i hate it ....
 "set listchars = tab:>-,trail:- " 将制表符显示为'>---',将行尾空格显示为'-' //wrong !!!!
@@ -48,13 +48,22 @@ set statusline=[%F]%y%r%m%*%=%l/%L:%c\ \ %p%%
 set laststatus=2    " always show the status line
 set ruler           " 在编辑过程中，在右下角显示光标位置的状态行
 
+"----- inner spell checker
+:set spell "why i have to typein this command manually even i set it here ....
+setlocal spell spelllang=en_us
 
 "================================
 "sunny key map
 "================================
 "select all
-nmap <C-a> ggvG 
-:inoremap <C-z> <Esc>ua
+nnoremap <C-a> ggvG 
+inoremap <C-a> <Esc>ggvG
+nnoremap <C-z> u
+inoremap <C-z> <Esc>ua
+nmap <C-S-c> "+y
+nmap <C-S-x> "+x
+nmap <C-S-v> "+gP
+imap <C-S-v> <S-INS>
 "-----arrows and home, end. seems not available in guake 
 :inoremap <M-h> <Left>
 :inoremap <M-l> <Right>
@@ -64,6 +73,10 @@ nmap <C-a> ggvG
 :inoremap <M-a> <End>
 :inoremap <M-;> <End>
 
+"-----some functions
+"current line, first letter of each word to Upper case
+nmap <S-F3> :.s/\w*/\u&/<CR>/OK.OK.OK.<CR>
+nmap <Leader><Space><CR> :.s/ //<CR>/OK.OK.OK.<CR>
 
 "=================================================
 " 括号自动智能位置补全, 闭括号重复性检测,  http://is.gd/hqJp0L
@@ -436,9 +449,29 @@ let g:DoxygenToolkit_authorName="admin@SunnyBoy.me"
 "!!! Does not end with "\<enter>"
 let g:DoxygenToolkit_licenseTag="GNU/GPL v3"
 
-"----- :Voom
+"----- :Voom Vim two-pane outliner 
 " :Voom
 
 "----- mark.vim 
 "\m, \*, *
+
+"----- languageTool. seems openOffice/libreOffice is needed ???
+" http://www.vim.org/scripts/script.php?script_id=3223
+" :help LanguageTool ;  :LanguageToolCheck ; zg,zug,z=,[s,]s,
+let g:languagetool_jar=$HOME . '/.vim/plugin/LanguageTool/LanguageTool.jar'
+
+"----- sdcv全称为stardict console version, apt-get install sdcv.
+" http://www.linuxidc.com/Linux/2011-01/31182.htm
+function! Mydict()
+	let expl=system('sdcv -n ' .
+		\  expand("<cword>"))
+	windo if
+		\ expand("%")=="diCt-tmp" |
+		\ q!|endif
+	25vsp diCt-tmp
+	setlocal buftype=nofile bufhidden=hide noswapfile
+	1s/^/\=expl/
+	1
+endfunction
+nmap F :call Mydict()<CR>
 

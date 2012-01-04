@@ -1,0 +1,38 @@
+# Words that have two valid spellings. Used by WordCoherencyRule.
+# This file must be encoded in UTF-8.
+# NOTE: to also find fullforms (e.g. aufwendiges, aufwendigeres), those 
+# forms may need to be added to added.txt
+aufwendig;aufwändig
+Bahnhofsplatz;Bahnhofplatz
+Bravour;Bravur
+Dekolletee;Dekolleté
+Delphin;Delfin
+Differential;Differenzial
+essentiell;essenziell
+Facette;Fassette
+Hämmorrhoiden;Hämorriden
+Joghurt;Jogurt
+Ketchup;Ketschup
+Kommuniqué;Kommunikee
+Lithographie;Lithografie
+Necessaire;Nessessär
+Nougat;Nugat
+Orthographie;Orthografie
+Panther;Panter
+Paragraph;Paragraf
+Phantasie;Fantasie
+Photoapparat;Fotoapparat
+Photosynthese;Fotosynthese
+Photo;Foto
+Portemonnaie;Portmonee
+Potential;Potenzial
+potentiell;potenziell
+Schenke;Schänke
+selbständig;selbstständig
+Spaghetti;Spagetti
+substantiell;substanziell
+Thunfisch;Tunfisch
+Varieté;Varietee
+varietéreif;varieteereif
+Vermögenssteuer;Vermögensteuer
+Xylophon;Xylofon
