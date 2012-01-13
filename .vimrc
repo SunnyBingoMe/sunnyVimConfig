@@ -55,6 +55,8 @@ setlocal spell spelllang=en_us
 "================================
 "sunny key map
 "================================
+set winaltkeys=no "disable alt-menu (alt-menubar)
+nnoremap ,s :w<CR>
 "select all
 nnoremap <C-a> ggvG 
 inoremap <C-a> <Esc>ggvG
@@ -290,8 +292,8 @@ let OmniCpp_GlobalScopeSearch=1
 let OmniCpp_DisplayMode=1
 let OmniCpp_DefaultNamespaces=["std"]
 inoremap <expr> <CR>       pumvisible()?"\<C-y>":"\<CR>"
-inoremap <expr> <M-n>      pumvisible()?"\<PageDown>\<C-n>\<C-p>":"\<M-n>"
-inoremap <expr> <M-p>      pumvisible()?"\<PageUp>\<C-p>\<C-n>":"\<M-p>"
+inoremap <expr> <M-n>      pumvisible()?"\<C-n>":"\<M-n>"
+inoremap <expr> <M-p>      pumvisible()?"\<C-p>":"\<M-p>"
 inoremap <expr> <M-e>      pumvisible()?"\<C-e>":"\<M-e>" 
 
 "------quick fix
@@ -378,7 +380,7 @@ cs add /home/solo/vim71/cscope.out /home/solo/vim71
 
 "------win manager
 let g:winManagerWindowLayout='FileExplorer|TagList' "fileExplorer is a build-in plugin named netrw.vim
-nmap wm :WMToggle<cr>
+nmap :wm :WMToggle<cr>
 
 "------ nerd tree, nerdtree
 nmap <Leader>e :NERDTreeToggle<CR> 
@@ -394,7 +396,7 @@ endfunction
 function! NERDTree_IsValid()
 	return 1
 endfunction
-nmap wm :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle<CR>:q<CR> endif <CR><CR>
+nmap :wm :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle<CR>:q<CR> endif <CR><CR>
 nmap <F3> :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle<CR>:q<CR> endif <CR><CR>
 
 "------mini bufer explorer
