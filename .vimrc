@@ -13,38 +13,46 @@ else
 	let g:iswindows=0
 endif
 set autochdir
-autocmd BufEnter *  silent!lcd %:p:h "local pwd
-"autocmd BufEnter * silent! cd %:p:h "global pwd
-autocmd BufWinEnter * silent! loadview
-autocmd BufWrite * silent! mkview
+if has("autocmd")
+	autocmd BufEnter *  silent!lcd %:p:h "local pwd
+	"autocmd BufEnter * silent! cd %:p:h "global pwd
+	autocmd BufWinEnter * silent! loadview
+	autocmd BufWinEnter * silent! set list
+	autocmd BufWrite * silent! mkview
+endif 
 
 set nocompatible "不要vim模仿vi模式，建议设置，否则会有很多(plugins?)不兼容的问题
 set nobackup
 set encoding=utf-8
 set helplang=en
 
+filetype on
 syntax enable
 syntax on
+"colorscheme sunnyEvening
+colorscheme sunnyDesert
 "colorscheme tango
-colorscheme desert
 "colorscheme desertEx "only good for c/cpp, do NOT use for the other file tyeps.
-set tabstop=4
+set tabstop=4 "the real tab; and the default value for other
+"set shiftwidth=4
+"set softtabstop=4 "should be used if 'set expandtab'
+set noexpandtab "do not expand tab as spaces.
 set backspace=2 "enable backspc
-set nu "// can not find the diff between 'nu!' and 'nu'
+set nu " # of line
 "set novb "disable beep sound
 set vb t_vb=
 set wrap "enable auto line wrap
 "set nowrap "disable auto line wrap
 set linebreak "full-word wrap
-"set list "show escaped 制表符 //tabs is shown: ^I => i hate it ....
-"set listchars = tab:>-,trail:- " 将制表符显示为'>---',将行尾空格显示为'-' //wrong !!!!
-"set listchars = tab:./ ,trail:. 
+set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
+set list "show escaped制表符 //'tab' is shown as: '^I' or 'listchars'
+nmap <Leader>l :set list!<CR>
 set hidden          " 没有保存的缓冲区可以被隐藏
 set cursorline "highlight current line
 set cursorcolumn "highlight current column
 
 "------ state/status line bar
-set statusline=[%F]%y%r%m%*%=%l/%L:%c\ \ %p%%
+set statusline=[%F]%y%r%m%*%=\ [%l/%L:%c\ %p%%]
 set laststatus=2    " always show the status line
 set ruler           " 在编辑过程中，在右下角显示光标位置的状态行
 
@@ -52,11 +60,34 @@ set ruler           " 在编辑过程中，在右下角显示光标位置的状�
 :set spell "why i have to typein this command manually even i set it here ....
 setlocal spell spelllang=en_us
 
+"----- fcitx im input 
+let g:input_toggle = 1
+function! Fcitx2en()
+   let s:input_status = system("fcitx-remote")
+   if s:input_status == 2
+      let g:input_toggle = 1
+      let l:a = system("fcitx-remote -c")
+   endif
+endfunction
+function! Fcitx2zh()
+   let s:input_status = system("fcitx-remote")
+   if s:input_status != 2 && g:input_toggle == 1
+      let l:a = system("fcitx-remote -o")
+      let g:input_toggle = 0
+   endif
+endfunction
+set timeoutlen=150
+if has("autocmd")
+	autocmd InsertLeave * call Fcitx2en() "退出insert模式自动关闭
+	"autocmd InsertEnter * call Fcitx2zh() "进入insert模式自动开启
+endif 
+
 "================================
 "sunny key map
 "================================
 set winaltkeys=no "disable alt-menu (alt-menubar)
-nnoremap ,s :w<CR>
+nnoremap ,w :w<CR>
+nnoremap <M-w> <Esc>:w<CR>a
 "select all
 nnoremap <C-a> ggvG 
 inoremap <C-a> <Esc>ggvG
@@ -178,8 +209,8 @@ set ai!             " 自动缩进
 
 "-------代码折叠 : za, zM(Minimize all), zR(Restore all)
 :nnoremap <space> za
-set foldlevel=3       " when start, default level to start fold
-set foldcolumn=4
+"set foldlevel=3       " when start, default level to start fold
+set foldcolumn=4       "在左侧显示缩进的层次
 "set foldmarker={,}
 "set foldmethod=marker
 "set foldmethod=syntax "grammer
