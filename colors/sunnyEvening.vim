@@ -55,4 +55,4 @@ hi Ignore ctermfg=DarkGrey guifg=grey20
 
 " vim: sw=2
 
-hi clear
+"hi clear

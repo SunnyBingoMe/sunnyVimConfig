@@ -3658,3 +3658,9 @@ tcpdump
 exe
 winProcmon
 tracepath
+config
+thunderbird
+noip2
+skype
+ok
+rc

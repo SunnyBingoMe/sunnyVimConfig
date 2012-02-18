@@ -44,7 +44,8 @@ set vb t_vb=
 set wrap "enable auto line wrap
 "set nowrap "disable auto line wrap
 set linebreak "full-word wrap
-set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
+set showbreak=…
+set listchars=eol:¶,tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
 set list "show escaped制表符 //'tab' is shown as: '^I' or 'listchars'
 nmap <Leader>l :set list!<CR>
 set hidden          " 没有保存的缓冲区可以被隐藏
@@ -83,20 +84,31 @@ if has("autocmd")
 endif 
 
 "================================
-"sunny key map
+"sunny key config/map
 "================================
 set winaltkeys=no "disable alt-menu (alt-menubar)
 nnoremap ,w :w<CR>
-nnoremap <M-w> <Esc>:w<CR>a
+nnoremap ,q :q<CR>
+nmap DD "_dd
+" not working !!!!
+vmap <C-j> gj
+vmap <C-k> gk
+vmap <C-4> g$
+vmap <C-6> g^
+vmap <C-0> g^
+nmap <C-j> gj
+nmap <C-k> gk
+nmap <C-4> g$
+nmap <C-6> g^
+nmap <C-0> g^
 "select all
-nnoremap <C-a> ggvG 
+nnoremap <C-a> ggvG
 inoremap <C-a> <Esc>ggvG
 nnoremap <C-z> u
 inoremap <C-z> <Esc>ua
-nmap <C-S-c> "+y
-nmap <C-S-x> "+x
-nmap <C-S-v> "+gP
-imap <C-S-v> <S-INS>
+vmap <C-S-c> "+y
+vmap <C-S-x> "+x
+imap <C-v> <S-INS>
 "-----arrows and home, end. seems not available in guake 
 :inoremap <M-h> <Left>
 :inoremap <M-l> <Right>
@@ -219,7 +231,7 @@ set foldmethod=indent
 "set foldopen-=search   " don't auto-open folds when search into
 "set foldopen-=undo     " don't auto-open folds when undo stuff
 
-"-------单文件编译
+"-------单文件编译 make/compile one single file
 map <F5> :call Do_OneFileMake()<CR>
 function Do_OneFileMake()
 	if expand("%:p:h")!=getcwd()
@@ -471,6 +483,9 @@ let g:C_BraceOnNewLine = "no"   " { 单独一行
 let g:C_AuthorName = "SunnyBoy.me"
 let g:C_Project="F9"
 let g:C_TypeOfH = "c"           " *.h文件的文件类型是C还是C++
+
+"----- nerd comment
+nmap ,cc <Leader>cc
 
 "----- doxygenTookit, documentation, comments
 let g:DoxygenToolkit_briefTag_pre="@Synopsis  " 

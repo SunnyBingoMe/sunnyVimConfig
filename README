@@ -1,3 +1,5 @@
 this is my own vim config
 .vimrc needs to be 'ln -s' to ~/
 
+plz delete /usr/share/vim/vim73/mswin.vim
+
