@@ -13,18 +13,20 @@ else
 	let g:iswindows=0
 endif
 set autochdir
-if has("autocmd")
+let mapleader=","
+
+set nocompatible "不要vim模仿vi模式，建议设置，否则会有很多(plugins?)不兼容的问题
+set nobackup
+set encoding=utf-8
+set helplang=en
+
+if has("autocmd") "if this version of vim support autocmd
 	autocmd BufEnter *  silent!lcd %:p:h "local pwd
 	"autocmd BufEnter * silent! cd %:p:h "global pwd
 	autocmd BufWinEnter * silent! loadview
 	autocmd BufWinEnter * silent! set list
 	autocmd BufWrite * silent! mkview
 endif 
-
-set nocompatible "不要vim模仿vi模式，建议设置，否则会有很多(plugins?)不兼容的问题
-set nobackup
-set encoding=utf-8
-set helplang=en
 
 filetype on
 syntax enable
@@ -58,24 +60,24 @@ set laststatus=2    " always show the status line
 set ruler           " 在编辑过程中，在右下角显示光标位置的状态行
 
 "----- inner spell checker
-:set spell "why i have to typein this command manually even i set it here ....
+set spell
 setlocal spell spelllang=en_us
 
 "----- fcitx im input 
 let g:input_toggle = 1
 function! Fcitx2en()
-   let s:input_status = system("fcitx-remote")
-   if s:input_status == 2
-      let g:input_toggle = 1
-      let l:a = system("fcitx-remote -c")
-   endif
+	let s:input_status = system("fcitx-remote")
+	if s:input_status == 2
+		let g:input_toggle = 1
+		let l:a = system("fcitx-remote -c")
+	endif
 endfunction
 function! Fcitx2zh()
-   let s:input_status = system("fcitx-remote")
-   if s:input_status != 2 && g:input_toggle == 1
-      let l:a = system("fcitx-remote -o")
-      let g:input_toggle = 0
-   endif
+	let s:input_status = system("fcitx-remote")
+	if s:input_status != 2 && g:input_toggle == 1
+		let l:a = system("fcitx-remote -o")
+		let g:input_toggle = 0
+	endif
 endfunction
 set timeoutlen=150
 if has("autocmd")
@@ -89,7 +91,7 @@ endif
 set winaltkeys=no "disable alt-menu (alt-menubar)
 nnoremap ,w :w<CR>
 nnoremap ,q :q<CR>
-nmap DD "_dd
+nmap <Del> "_dd
 " not working !!!!
 vmap <C-j> gj
 vmap <C-k> gk
@@ -106,17 +108,17 @@ nnoremap <C-a> ggvG
 inoremap <C-a> <Esc>ggvG
 nnoremap <C-z> u
 inoremap <C-z> <Esc>ua
-vmap <C-S-c> "+y
-vmap <C-S-x> "+x
-imap <C-v> <S-INS>
+"vmap <C-S-c> "+y
+"vmap <C-S-x> "+x
+"imap <C-v> <S-INS>
 "-----arrows and home, end. seems not available in guake 
-:inoremap <M-h> <Left>
-:inoremap <M-l> <Right>
-:inoremap <M-j> <Down>
-:inoremap <M-k> <Up>
-:inoremap <M-i> <Home>
-:inoremap <M-a> <End>
-:inoremap <M-;> <End>
+inoremap <M-h> <Left>
+inoremap <M-l> <Right>
+inoremap <M-j> <Down>
+inoremap <M-k> <Up>
+inoremap <M-i> <Home>
+inoremap <M-a> <End>
+inoremap <M-;> <End>
 
 "-----some functions
 "current line, first letter of each word to Upper case
@@ -124,7 +126,7 @@ nmap <S-F3> :.s/\w*/\u&/<CR>/OK.OK.OK.<CR>
 nmap <Leader><Space><CR> :.s/ //<CR>/OK.OK.OK.<CR>
 
 "=================================================
-" 括号自动智能位置补全, 闭括号重复性检测,  http://is.gd/hqJp0L
+" auto-pair-close 括号自动智能位置补全, 闭括号重复性检测,  http://is.gd/hqJp0L
 "=================================================
 :inoremap <S-ENTER> <c-r>=SkipPair()<CR>
 :inoremap <S-SPACE> <ESC>la
@@ -137,7 +139,6 @@ nmap <Leader><Space><CR> :.s/ //<CR>/OK.OK.OK.<CR>
 :inoremap ] <c-r>=ClosePair(']')<CR>
 "加了del,只在 coldComplete 括号重复时使用
 :inoremap ;; <Del><ESC>A;<CR>
-
 
 function! ClosePair(char)
 	if getline('.')[col('.') - 1] == a:char
@@ -308,6 +309,19 @@ endfunction
 "for plugins
 "=========================================
 "
+"------ auto close
+"OBS: this setting will partly overwrite the previous settings in 'auto-pair-close'
+let g:AutoClosePairs = {'[': ']', '(': ')', '"': '"', "'": "'"}
+
+"------ vim latex suit
+filetype plugin on
+if g:iswindows==1
+	set shellslash
+endif
+set grepprg=grep\ -nH\ $* "has problem in windows
+filetype indent on
+let g:tex_flavor='latex'
+
 "------ctag path of sys include, the buildin ctags is NOT ok, 'Exuberant Ctags' is needed 
 "ctags -R -f ~/.vim/systags --c-kinds=+p /usr/include /usr/local/include
 set tags+=~/.vim/systags
@@ -472,10 +486,10 @@ let g:neocomplcache_min_syntax_length = 2
 inoremap <expr> <CR>       pumvisible()?"\<C-Y>":"\<CR>"
 " Define dictionary.
 "let g:neocomplcache_dictionary_filetype_lists = {
-"    \ 'default' : '',
-"    \ 'vimshell' : $HOME.'/.vimshell_hist',
-"    \ 'scheme' : $HOME.'/.gosh_completions'
-"    \ }
+"	 \ 'default' : '',
+"	 \ 'vimshell' : $HOME.'/.vimshell_hist',
+"	 \ 'scheme' : $HOME.'/.gosh_completions'
+"	 \ }
 
 "----- c.vim cvim
 let g:C_Comments = "no"         " 不用c风格,//用C++的注释风格
