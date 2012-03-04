@@ -91,7 +91,9 @@ endif
 set winaltkeys=no "disable alt-menu (alt-menubar)
 nnoremap ,w :w<CR>
 nnoremap ,q :q<CR>
-nmap <Del> "_dd
+nmap <Del><Del> "_dd
+vmap <Del> "_d
+nmap <Del> "_x
 " not working !!!!
 vmap <C-j> gj
 vmap <C-k> gk
