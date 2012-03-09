@@ -92,11 +92,19 @@ endif
 set winaltkeys=no "disable alt-menu (alt-menubar)
 nnoremap ,w :w<CR>
 nnoremap ,q :q<CR>
+nmap tw "_dw
 nmap tt "_dd
 vmap t "_d
-nmap t "_x
-nmap tw "_dw
-nmap <S-t> "_D
+nmap T "_D
+vmap T "_D
+nmap f "_x
+vmap f "_x
+nmap F "_X
+vmap F "_X
+nmap fs "_s
+vmap fs "_s
+nmap ts "_S
+vmap ts "_S
 " not working !!!!
 vmap <C-j> gj
 vmap <C-k> gk
@@ -540,5 +548,5 @@ function! Mydict()
 	1s/^/\=expl/
 	1
 endfunction
-nmap F :call Mydict()<CR>
+nmap <F1> :call Mydict()<CR>
 
