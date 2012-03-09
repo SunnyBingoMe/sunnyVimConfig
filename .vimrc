@@ -9,6 +9,7 @@
 "================================
 if(has("win32") || has("win95") || has("win64") || has("win16"))
 	let g:iswindows=1
+	set guifont=Consolas:h11:cANSI
 else
 	let g:iswindows=0
 endif
