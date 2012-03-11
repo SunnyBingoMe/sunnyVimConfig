@@ -46,10 +46,10 @@ set nu " # of line
 set vb t_vb=
 set wrap "enable auto line wrap
 "set nowrap "disable auto line wrap
-set linebreak "full-word wrap
-set showbreak=…
-set listchars=eol:¶,tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
-set list "show escaped制表符 //'tab' is shown as: '^I' or 'listchars'
+set linebreak "full-word wrap //breaks include " ^I!@*-+;:,./?" //list disables linebreak
+"set showbreak=…
+set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
+set list "show escaped制表符 //'tab' is shown (as: '^I' or 'listchars') //list disables linebreak
 nmap <Leader>l :set list!<CR>
 set hidden          " 没有保存的缓冲区可以被隐藏
 set cursorline "highlight current line
