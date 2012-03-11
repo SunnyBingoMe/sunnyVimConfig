@@ -550,3 +550,7 @@ function! Mydict()
 endfunction
 nmap <F1> :call Mydict()<CR>
 
+"----- hex manager //hexman.vim
+nmap <C-h> <leader>hm
+imap <C-h> <Esc><leader>hm
+vmap <C-h> <Esc><leader>hm
