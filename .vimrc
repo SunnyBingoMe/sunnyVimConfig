@@ -13,6 +13,11 @@ if(has("win32") || has("win95") || has("win64") || has("win16"))
 else
 	let g:iswindows=0
 endif
+if (has('gui_running'))
+	let g:isgui=1
+else
+	let g:isgui=0
+endif
 set autochdir
 let mapleader=","
 
@@ -48,8 +53,12 @@ set wrap "enable auto line wrap
 "set nowrap "disable auto line wrap
 set linebreak "full-word wrap //breaks include " ^I!@*-+;:,./?" //list disables linebreak
 "set showbreak=…
-set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
-set list "show escaped制表符 //'tab' is shown (as: '^I' or 'listchars') //list disables linebreak
+if g:isgui == 1
+	set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
+	set list "show escaped制表符 //'tab' is shown (as: '^I' or 'listchars') //list disables linebreak
+else
+	set nolist
+endif
 nmap <Leader>l :set list!<CR>
 set hidden          " 没有保存的缓冲区可以被隐藏
 set cursorline "highlight current line
@@ -550,7 +559,7 @@ function! Mydict()
 endfunction
 nmap <F1> :call Mydict()<CR>
 
-"----- hex manager //hexman.vim
-nmap <C-h> <leader>hm
-imap <C-h> <Esc><leader>hm
-vmap <C-h> <Esc><leader>hm
+"----- hex manager //hexman.vim //error in win-console
+"nmap <C-h> <leader>hm
+"imap <C-h> <Esc><leader>hm
+"vmap <C-h> <Esc><leader>hm
