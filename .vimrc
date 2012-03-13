@@ -114,7 +114,10 @@ nmap fs "_s
 vmap fs "_s
 nmap ts "_S
 vmap ts "_S
-" not working !!!!
+imap <C-BS> <C-w>
+imap <C-h> <C-Left>
+imap <C-l> <C-Right>
+" below not working !!!!
 vmap <C-j> gj
 vmap <C-k> gk
 vmap <C-4> g$
