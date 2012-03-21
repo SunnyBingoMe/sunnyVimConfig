@@ -57,6 +57,7 @@ if g:isgui == 1
 	set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
 	set list "show escaped制表符 //'tab' is shown (as: '^I' or 'listchars') //list disables linebreak
 else
+	set listchars=tab:>\  " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
 	set nolist
 endif
 nmap <Leader>l :set list!<CR>
@@ -496,7 +497,7 @@ nmap <F3> :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle
 
 "------mini bufer explorer
 let g:miniBufExplMapCTabSwitchBufs = 1
-"let g:miniBufExplMapWindowNavVim = 1 "<C-h,j,k,l>切换上下左右窗口 // not available
+"let g:miniBufExplMapWindowNavVim = 1 "<C-h,j,k,l>切换上下左右窗口 // not available ???
 let g:miniBufExplMapWindowNavArrows = 1 "<C-箭头>切换上下左右窗口, C-arrows
 
 "----- c header switch a.vim
