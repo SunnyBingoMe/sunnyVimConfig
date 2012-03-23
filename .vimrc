@@ -13,7 +13,7 @@ if(has("win32") || has("win95") || has("win64") || has("win16"))
 else
 	let g:iswindows=0
 endif
-if (has('gui_running'))
+if (has('gui_running') || has("gui_macvim"))
 	let g:isgui=1
 else
 	let g:isgui=0
@@ -54,10 +54,10 @@ set wrap "enable auto line wrap
 set linebreak "full-word wrap //breaks include " ^I!@*-+;:,./?" //list disables linebreak
 "set showbreak=…
 if g:isgui == 1
-	set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
+	set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'▸ >- ',将行尾空格显示为'¬'; 需要和 set list 配合使用
 	set list "show escaped制表符 //'tab' is shown (as: '^I' or 'listchars') //list disables linebreak
 else
-	set listchars=tab:>\  " 将制表符显示为'> ',将行尾空格显示为'-'; 需要和 set list 配合使用
+	set listchars=tab:>\  " 将制表符显示为'▸ >-',将行尾空格显示为'¬'; 需要和 set list 配合使用
 	set nolist
 endif
 nmap <Leader>l :set list!<CR>
@@ -580,3 +580,6 @@ nmap <F1> :call Mydict()<CR>
 "nmap <C-h> <leader>hm
 "imap <C-h> <Esc><leader>hm
 "vmap <C-h> <Esc><leader>hm
+
+"----- EasyMotion.vim 
+nmap ; H<Leader><Leader>w
