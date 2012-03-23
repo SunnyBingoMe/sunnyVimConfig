@@ -149,7 +149,7 @@ nnoremap <C-z> u
 inoremap <C-z> <Esc>ua
 "vmap <C-S-c> "+y
 "vmap <C-S-x> "+x
-"imap <C-v> <S-INS>
+imap <C-v> <S-INS>
 "-----arrows and home, end. seems not available in guake 
 inoremap <M-h> <Left>
 inoremap <M-l> <Right>
