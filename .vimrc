@@ -129,8 +129,8 @@ vnoremap s "_s
 nnoremap S "_S
 vnoremap S "_S
 imap <C-BS> <C-w>
-imap <C-h> <C-Left>
-imap <C-l> <C-Right>
+imap <M-S-h> <C-Left>
+imap <M-S-l> <C-Right>
 " below not working !!!!
 vmap <C-j> gj
 vmap <C-k> gk
