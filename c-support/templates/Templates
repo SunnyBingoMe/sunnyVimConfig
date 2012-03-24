@@ -3,12 +3,13 @@ $ =============================================================
 $ ========== USER MACROS ======================================
 $ =============================================================
 $
-|AUTHOR|    = YOUR NAME 
-|AUTHORREF| = 
-|EMAIL|     = 
-|COMPANY|   = 
-|COPYRIGHT| = Copyright (c) |YEAR|, |AUTHOR|
-|STYLE|     = default
+|AUTHOR|       = Bin Sun 
+|AUTHORREF|    = http://blog.SunnyBoy.Me
+|EMAIL|        = BinSun#mail.com
+|COMPANY|      = BTH
+|ORGANIZATION| = BTH
+|COPYRIGHT|    = Copyright (c) |YEAR|, |AUTHOR|
+|STYLE|        = default
 $
 $ =============================================================
 $ ========== FILE INCLUDES ====================================
