@@ -7,16 +7,30 @@
 "================================
 "sunny basic config
 "================================
+set encoding=utf8
+set ffs=unix,dos,mac "Default file types
+"Persistent undo
+try
+    if MySys() == "windows"
+      set undodir=C:\Windows\Temp
+    else
+      set undodir=~/.vim_runtime/undodir
+    endif
+
+    set undofile
+catch
+endtry
+
 if(has("win32") || has("win95") || has("win64") || has("win16"))
-	let g:iswindows=1
-	set guifont=Consolas:h11:cANSI
+    let g:iswindows=1
+    set guifont=Consolas:h11:cANSI
 else
-	let g:iswindows=0
+    let g:iswindows=0
 endif
-if (has('gui_running') || has("gui_macvim"))
-	let g:isgui=1
+if has('gui_running')
+    let g:isgui=1
 else
-	let g:isgui=0
+    let g:isgui=0
 endif
 set autochdir
 let mapleader=","
@@ -27,11 +41,11 @@ set encoding=utf-8
 set helplang=en
 
 if has("autocmd") "if this version of vim support autocmd
-	autocmd BufEnter *  silent!lcd %:p:h "local pwd
-	"autocmd BufEnter * silent! cd %:p:h "global pwd
-	autocmd BufWinEnter * silent! loadview
-	autocmd BufWinEnter * silent! set list
-	autocmd BufWrite * silent! mkview
+    autocmd BufEnter *  silent!lcd %:p:h "local pwd
+    "autocmd BufEnter * silent! cd %:p:h "global pwd
+    autocmd BufWinEnter * silent! loadview
+    autocmd BufWinEnter * silent! set list
+    autocmd BufWrite * silent! mkview
 endif 
 
 filetype on
@@ -42,23 +56,24 @@ colorscheme sunnyDesert
 "colorscheme tango
 "colorscheme desertEx "only good for c/cpp, do NOT use for the other file tyeps.
 set tabstop=4 "the real tab; and the default value for other
-"set shiftwidth=4
-"set softtabstop=4 "should be used if 'set expandtab'
-set noexpandtab "do not expand tab as spaces.
+"set noexpandtab "do not expand tab as spaces.
+set expandtab tabstop=4 shiftwidth=4 softtabstop=4 autoindent "expand tab as spaces."should be used if 'set expandtab'
+"set textwidth=80
 set backspace=2 "enable backspc
 set nu " # of line
 "set novb "disable beep sound
 set vb t_vb=
 set wrap "enable auto line wrap
 "set nowrap "disable auto line wrap
+nmap <C-S-w> :set wrap!<CR>
 set linebreak "full-word wrap //breaks include " ^I!@*-+;:,./?" //list disables linebreak
 "set showbreak=…
 if g:isgui == 1
-	set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'▸ >- ',将行尾空格显示为'¬'; 需要和 set list 配合使用
-	set list "show escaped制表符 //'tab' is shown (as: '^I' or 'listchars') //list disables linebreak
+    set listchars=tab:▸\ ,trail:¬,extends:»,precedes:« " 将制表符显示为'▸ >- ',将行尾空格显示为'¬'; 需要和 set list 配合使用
+    set list "show escaped制表符 //'tab' is shown (as: '^I' or 'listchars') //list disables linebreak
 else
-	set listchars=tab:>\  " 将制表符显示为'▸ >-',将行尾空格显示为'¬'; 需要和 set list 配合使用
-	set nolist
+    set listchars=tab:>\ ,trail:-,extends:>,precedes:<  " 将制表符显示为'▸ >-',将行尾空格显示为'¬'; 需要和 set list 配合使用
+    set nolist
 endif
 nmap <Leader>l :set list!<CR>
 set hidden          " 没有保存的缓冲区可以被隐藏
@@ -77,31 +92,48 @@ setlocal spell spelllang=en_us
 "----- fcitx im input 
 let g:input_toggle = 1
 function! Fcitx2en()
-	let s:input_status = system("fcitx-remote")
-	if s:input_status == 2
-		let g:input_toggle = 1
-		let l:a = system("fcitx-remote -c")
-	endif
+    let s:input_status = system("fcitx-remote")
+    if s:input_status == 2
+        let g:input_toggle = 1
+        let l:a = system("fcitx-remote -c")
+    endif
 endfunction
 function! Fcitx2zh()
-	let s:input_status = system("fcitx-remote")
-	if s:input_status != 2 && g:input_toggle == 1
-		let l:a = system("fcitx-remote -o")
-		let g:input_toggle = 0
-	endif
+    let s:input_status = system("fcitx-remote")
+    if s:input_status != 2 && g:input_toggle == 1
+        let l:a = system("fcitx-remote -o")
+        let g:input_toggle = 0
+    endif
 endfunction
 set timeoutlen=150
 if has("autocmd")
-	autocmd InsertLeave * call Fcitx2en() "退出insert模式自动关闭
-	"autocmd InsertEnter * call Fcitx2zh() "进入insert模式自动开启
+    autocmd InsertLeave * call Fcitx2en() "退出insert模式自动关闭
+    "autocmd InsertEnter * call Fcitx2zh() "进入insert模式自动开启
 endif 
+
+
+""""""""""""""""""""""""""""""
+" => Visual mode related
+""""""""""""""""""""""""""""""
+" Really useful!
+"  In visual mode when you press * or # to search for the current selection
+vnoremap <silent> * :call VisualSearch('f')<CR>
+vnoremap <silent> # :call VisualSearch('b')<CR>
+
+" When you press gv you vimgrep after the selected text
+vnoremap <silent> gv :call VisualSearch('gv')<CR>
+map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
+
+
 
 "================================
 "sunny key config/map
 "================================
 set winaltkeys=no "disable alt-menu (alt-menubar)
+autocmd InsertLeave * set iminsert=0 " Kill the capslock when leaving insert mode.
 nnoremap ,w :w<CR>
 nnoremap ,q :q<CR>
+nnoremap ,,q :q!<CR>
 nnoremap dw "_dw
 nnoremap tw "+dw
 nnoremap dd "_dd
@@ -120,17 +152,24 @@ nnoremap X "_X
 nnoremap F "+X
 vnoremap X "_X
 vnoremap F "+X
-nnoremap yy "+yy
-vnoremap y "+y
-nnoremap p "+gp
-nnoremap P "+gP
+"nnoremap yy "+yy
+"vnoremap y "+y
+"nnoremap p "+gp
+"nnoremap P "+gP
 nnoremap s "_s
 vnoremap s "_s
 nnoremap S "_S
 vnoremap S "_S
+nnoremap c "_c
+vnoremap s "_c
+nnoremap C "_C
+vnoremap C "_C
+set clipboard=unnamed "http://goo.gl/rafSW
 imap <C-BS> <C-w>
 imap <M-S-h> <C-Left>
 imap <M-S-l> <C-Right>
+nmap <M-f> <C-f>
+nmap <M-b> <C-b>
 " below not working !!!!
 vmap <C-j> gj
 vmap <C-k> gk
@@ -180,60 +219,60 @@ nmap <Leader><Space><CR> :.s/ //<CR>/OK.OK.OK.<CR>
 :inoremap ;; <Del><ESC>A;<CR>
 
 function! ClosePair(char)
-	if getline('.')[col('.') - 1] == a:char
-		return "\<Right>"
-	else
-		return a:char
-	endif
+    if getline('.')[col('.') - 1] == a:char
+        return "\<Right>"
+    else
+        return a:char
+    endif
 endf
 function! Semicolon()
-	"echo getline('.')[col('.')]
-	if getline('.')[col('.')] == ')'
-		return "<ESC>A;"
-	elseif getline('.')[col('.')] == '}'
-		return "\<ESC>A;"
-	elseif getline('.')[col('.')] == ']'
-		return "\<ESC>A;"
-	else
-		return ";"
-	endif
+    "echo getline('.')[col('.')]
+    if getline('.')[col('.')] == ')'
+        return "<ESC>A;"
+    elseif getline('.')[col('.')] == '}'
+        return "\<ESC>A;"
+    elseif getline('.')[col('.')] == ']'
+        return "\<ESC>A;"
+    else
+        return ";"
+    endif
 endf
 function! SkipPair()
-	if getline('.')[col('.') - 1] == ')'
-		return "\<ESC>o"
-	else
-		normal j
-		let curline = line('.')
-		let nxtline = curline
-		while curline == nxtline
-			if getline('.')[col('.') - 1] == '}'
-				normal j
-				let nxtline = nxtline + 1
-				let curline = line('.')
-				continue
-			else
-				return "\<ESC>i"
-			endif
-		endwhile
-		return "\<ESC>o"
-	endif
+    if getline('.')[col('.') - 1] == ')'
+        return "\<ESC>o"
+    else
+        normal j
+        let curline = line('.')
+        let nxtline = curline
+        while curline == nxtline
+            if getline('.')[col('.') - 1] == '}'
+                normal j
+                let nxtline = nxtline + 1
+                let curline = line('.')
+                continue
+            else
+                return "\<ESC>i"
+            endif
+        endwhile
+        return "\<ESC>o"
+    endif
 endf
 function! ClsoeBrace()
-	if getline('.')[col('.') - 2] == '='
-		return "{}\<ESC>i"
-	elseif getline('.')[col('.') - 3] == '='
-		return "{}\<ESC>i"
-	elseif getline('.')[col('.') - 1] == '{'
-		return "{}\<ESC>i"
-	elseif getline('.')[col('.') - 2] == '{'
-		return "{}\<ESC>i"
-	elseif getline('.')[col('.') - 2] == ','
-		return "{}\<ESC>i"
-	elseif getline('.')[col('.') - 3] == ','
-		return "{}\<ESC>i"
-	else
-		return "{\<ENTER>}\<ESC>O"
-	endif
+    if getline('.')[col('.') - 2] == '='
+        return "{}\<ESC>i"
+    elseif getline('.')[col('.') - 3] == '='
+        return "{}\<ESC>i"
+    elseif getline('.')[col('.') - 1] == '{'
+        return "{}\<ESC>i"
+    elseif getline('.')[col('.') - 2] == '{'
+        return "{}\<ESC>i"
+    elseif getline('.')[col('.') - 2] == ','
+        return "{}\<ESC>i"
+    elseif getline('.')[col('.') - 3] == ','
+        return "{}\<ESC>i"
+    else
+        return "{\<ENTER>}\<ESC>O"
+    endif
 endf
 
 
@@ -274,73 +313,73 @@ set foldmethod=indent
 "-------单文件编译 make/compile one single file
 map <F5> :call Do_OneFileMake()<CR>
 function Do_OneFileMake()
-	if expand("%:p:h")!=getcwd()
-		echohl WarningMsg | echo "Fail to make! This file is not in the current dir! Press <F7> to redirect to the dir of this file." | echohl None
-		return
-	endif
-	let sourcefileename=expand("%:t")
-	if (sourcefileename=="" || (&filetype!="cpp" && &filetype!="c"))
-		echohl WarningMsg | echo "Fail to make! Please select the right file!" | echohl None
-		return
-	endif
-	let deletedspacefilename=substitute(sourcefileename,' ','','g')
-	if strlen(deletedspacefilename)!=strlen(sourcefileename)
-		echohl WarningMsg | echo "Fail to make! Please delete the spaces in the filename!" | echohl None
-		return
-	endif
-	if &filetype=="c"
-		if g:iswindows==1
-			set makeprg=gcc\ -o\ %<.exe\ %
-		else
-			set makeprg=gcc\ -o\ %<\ %
-		endif
-	elseif &filetype=="cpp"
-		if g:iswindows==1
-			set makeprg=g++\ -o\ %<.exe\ %
-		else
-			set makeprg=g++\ -o\ %<\ %
-		endif
-		"elseif &filetype=="cs"
-		"set makeprg=csc\ \/nologo\ \/out:%<.exe\ %
-	endif
-	if(g:iswindows==1)
-		let outfilename=substitute(sourcefileename,'\(\.[^.]*\')' ,'.exe','g')
-		let toexename=outfilename
-	else
-		let outfilename=substitute(sourcefileename,'\(\.[^.]*\')' ,'','g')
-		let toexename=outfilename
-	endif
-	if filereadable(outfilename)
-		if(g:iswindows==1)
-			let outdeletedsuccess=delete(getcwd()."\\".outfilename)
-		else
-			let outdeletedsuccess=delete("./".outfilename)
-		endif
-		if(outdeletedsuccess!=0)
-			set makeprg=make
-			echohl WarningMsg | echo "Fail to make! I cannot delete the ".outfilename | echohl None
-			return
-		endif
-	endif
-	execute "silent make"
-	set makeprg=make
-	execute "normal :"
-	if filereadable(outfilename)
-		if(g:iswindows==1)
-			execute "!".toexename
-		else
-			execute "!./".toexename
-		endif
-	endif
-	execute "copen"
+    if expand("%:p:h")!=getcwd()
+        echohl WarningMsg | echo "Fail to make! This file is not in the current dir! Press <F7> to redirect to the dir of this file." | echohl None
+        return
+    endif
+    let sourcefileename=expand("%:t")
+    if (sourcefileename=="" || (&filetype!="cpp" && &filetype!="c"))
+        echohl WarningMsg | echo "Fail to make! Please select the right file!" | echohl None
+        return
+    endif
+    let deletedspacefilename=substitute(sourcefileename,' ','','g')
+    if strlen(deletedspacefilename)!=strlen(sourcefileename)
+        echohl WarningMsg | echo "Fail to make! Please delete the spaces in the filename!" | echohl None
+        return
+    endif
+    if &filetype=="c"
+        if g:iswindows==1
+            set makeprg=gcc\ -o\ %<.exe\ %
+        else
+            set makeprg=gcc\ -o\ %<\ %
+        endif
+    elseif &filetype=="cpp"
+        if g:iswindows==1
+            set makeprg=g++\ -o\ %<.exe\ %
+        else
+            set makeprg=g++\ -o\ %<\ %
+        endif
+        "elseif &filetype=="cs"
+        "set makeprg=csc\ \/nologo\ \/out:%<.exe\ %
+    endif
+    if(g:iswindows==1)
+        let outfilename=substitute(sourcefileename,'\(\.[^.]*\')' ,'.exe','g')
+        let toexename=outfilename
+    else
+        let outfilename=substitute(sourcefileename,'\(\.[^.]*\')' ,'','g')
+        let toexename=outfilename
+    endif
+    if filereadable(outfilename)
+        if(g:iswindows==1)
+            let outdeletedsuccess=delete(getcwd()."\\".outfilename)
+        else
+            let outdeletedsuccess=delete("./".outfilename)
+        endif
+        if(outdeletedsuccess!=0)
+            set makeprg=make
+            echohl WarningMsg | echo "Fail to make! I cannot delete the ".outfilename | echohl None
+            return
+        endif
+    endif
+    execute "silent make"
+    set makeprg=make
+    execute "normal :"
+    if filereadable(outfilename)
+        if(g:iswindows==1)
+            execute "!".toexename
+        else
+            execute "!./".toexename
+        endif
+    endif
+    execute "copen"
 endfunction
 "进行make的设置
 map <F6> :call Do_make()<CR>
 map <c-F6> :silent make clean<CR>
 function Do_make()
-	set makeprg=make
-	execute "silent make"
-	execute "copen"
+    set makeprg=make
+    execute "silent make"
+    execute "copen"
 endfunction
 
 
@@ -355,7 +394,7 @@ let g:AutoClosePairs = {'[': ']', '(': ')', '"': '"', "'": "'"}
 "------ vim latex suit
 filetype plugin on
 if g:iswindows==1
-	set shellslash
+    set shellslash
 endif
 set grepprg=grep\ -nH\ $* "has problem in windows
 filetype indent on
@@ -416,59 +455,59 @@ nmap <C-@>f :cs find f <C-R>=expand("<cfile>")<CR><CR>:copen<CR>
 nmap <C-@>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>:copen<CR>
 nmap <C-@>d :cs find d <C-R>=expand("<cword>")<CR><CR>:copen<CR>
 function! Do_CsTag()
-	let dir = getcwd()
-	if filereadable("tags")
-		if(g:iswindows==1)
-			let tagsdeleted=delete(dir."\\"."tags")
-		else
-			let tagsdeleted=delete("./"."tags")
-		endif
-		if(tagsdeleted!=0)
-			echohl WarningMsg | echo "Fail to do tags! I cannot delete the tags" | echohl None
-			return
-		endif
-	endif
-	if has("cscope")
-		silent! execute "cs kill -1"
-	endif
-	if filereadable("cscope.files")
-		if(g:iswindows==1)
-			let csfilesdeleted=delete(dir."\\"."cscope.files")
-		else
-			let csfilesdeleted=delete("./"."cscope.files")
-		endif
-		if(csfilesdeleted!=0)
-			echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.files" | echohl None
-			return
-		endif
-	endif
-	if filereadable("cscope.out")
-		if(g:iswindows==1)
-			let csoutdeleted=delete(dir."\\"."cscope.out")
-		else
-			let csoutdeleted=delete("./"."cscope.out")
-		endif
-		if(csoutdeleted!=0)
-			echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.out" | echohl None
-			return
-		endif
-	endif
-	if(executable('ctags'))
-		"silent! execute "!ctags -R --c-types=+p --fields=+lS *"
-		silent! execute "!ctags -R --c++-kinds=+p --fields=+ialS --extra=+q ."
-	endif
-	if(executable('cscope') && has("cscope") )
-		if(g:iswindows!=1)
-			silent! execute "!find . -name '*.h' -o -name '*.c' -o -name '*.cpp' -o -name '*.java' -o -name '*.cs' > cscope.files"
-		else
-			silent! execute "!dir /s/b *.c,*.cpp,*.h,*.java,*.cs >> cscope.files"
-		endif
-		silent! execute "!cscope -b"
-		execute "normal :"
-		if filereadable("cscope.out")
-			execute "cs add cscope.out"
-		endif
-	endif
+    let dir = getcwd()
+    if filereadable("tags")
+        if(g:iswindows==1)
+            let tagsdeleted=delete(dir."\\"."tags")
+        else
+            let tagsdeleted=delete("./"."tags")
+        endif
+        if(tagsdeleted!=0)
+            echohl WarningMsg | echo "Fail to do tags! I cannot delete the tags" | echohl None
+            return
+        endif
+    endif
+    if has("cscope")
+        silent! execute "cs kill -1"
+    endif
+    if filereadable("cscope.files")
+        if(g:iswindows==1)
+            let csfilesdeleted=delete(dir."\\"."cscope.files")
+        else
+            let csfilesdeleted=delete("./"."cscope.files")
+        endif
+        if(csfilesdeleted!=0)
+            echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.files" | echohl None
+            return
+        endif
+    endif
+    if filereadable("cscope.out")
+        if(g:iswindows==1)
+            let csoutdeleted=delete(dir."\\"."cscope.out")
+        else
+            let csoutdeleted=delete("./"."cscope.out")
+        endif
+        if(csoutdeleted!=0)
+            echohl WarningMsg | echo "Fail to do cscope! I cannot delete the cscope.out" | echohl None
+            return
+        endif
+    endif
+    if(executable('ctags'))
+        "silent! execute "!ctags -R --c-types=+p --fields=+lS *"
+        silent! execute "!ctags -R --c++-kinds=+p --fields=+ialS --extra=+q ."
+    endif
+    if(executable('cscope') && has("cscope") )
+        if(g:iswindows!=1)
+            silent! execute "!find . -name '*.h' -o -name '*.c' -o -name '*.cpp' -o -name '*.java' -o -name '*.cs' > cscope.files"
+        else
+            silent! execute "!dir /s/b *.c,*.cpp,*.h,*.java,*.cs >> cscope.files"
+        endif
+        silent! execute "!cscope -b"
+        execute "normal :"
+        if filereadable("cscope.out")
+            execute "cs add cscope.out"
+        endif
+    endif
 endfunction
 
 "this is for experiment
@@ -483,14 +522,14 @@ nmap <Leader>e :NERDTreeToggle<CR>
 "use nerd tree within win-manager
 let g:NERDTree_title="[NERD Tree]" 
 let g:winManagerWindowLayout='NERDTree|TagList,BufExplorer' 
-	"will overwrite the previous win-manager config of 'FileExplorer|TagList'
-	"to show buffer explorer in win-manager, replace the ',' in the previous
-	"line with '|'
+    "will overwrite the previous win-manager config of 'FileExplorer|TagList'
+    "to show buffer explorer in win-manager, replace the ',' in the previous
+    "line with '|'
 function! NERDTree_Start()
-	exec 'NERDTree'
+    exec 'NERDTree'
 endfunction
 function! NERDTree_IsValid()
-	return 1
+    return 1
 endfunction
 nmap :wm :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle<CR>:q<CR> endif <CR><CR>
 nmap <F3> :if IsWinManagerVisible() <BAR> WMToggle<CR> <BAR> else <BAR> WMToggle<CR>:q<CR> endif <CR><CR>
@@ -525,10 +564,10 @@ let g:neocomplcache_min_syntax_length = 2
 inoremap <expr> <CR>       pumvisible()?"\<C-Y>":"\<CR>"
 " Define dictionary.
 "let g:neocomplcache_dictionary_filetype_lists = {
-"	 \ 'default' : '',
-"	 \ 'vimshell' : $HOME.'/.vimshell_hist',
-"	 \ 'scheme' : $HOME.'/.gosh_completions'
-"	 \ }
+"    \ 'default' : '',
+"    \ 'vimshell' : $HOME.'/.vimshell_hist',
+"    \ 'scheme' : $HOME.'/.gosh_completions'
+"    \ }
 
 "----- c.vim cvim
 let g:C_Comments = "no"         " 不用c风格,//用C++的注释风格
@@ -538,7 +577,10 @@ let g:C_Project="F9"
 let g:C_TypeOfH = "c"           " *.h文件的文件类型是C还是C++
 
 "----- nerd comment
-nmap ,cc <Leader>cc
+nmap <CR> <Leader>ci
+vmap <CR> <Leader>ci
+nmap <S-CR> <Leader>c<Space>
+vmap <S-CR> <Leader>c<Space>
 
 "----- doxygenTookit, documentation, comments
 let g:DoxygenToolkit_briefTag_pre="@Synopsis  " 
@@ -564,15 +606,15 @@ let g:languagetool_jar=$HOME . '/.vim/plugin/LanguageTool/LanguageTool.jar'
 "----- sdcv全称为stardict console version, apt-get install sdcv.
 " http://www.linuxidc.com/Linux/2011-01/31182.htm
 function! Mydict()
-	let expl=system('sdcv -n ' .
-		\  expand("<cword>"))
-	windo if
-		\ expand("%")=="diCt-tmp" |
-		\ q!|endif
-	25vsp diCt-tmp
-	setlocal buftype=nofile bufhidden=hide noswapfile
-	1s/^/\=expl/
-	1
+    let expl=system('sdcv -n ' .
+        \  expand("<cword>"))
+    windo if
+        \ expand("%")=="diCt-tmp" |
+        \ q!|endif
+    25vsp diCt-tmp
+    setlocal buftype=nofile bufhidden=hide noswapfile
+    1s/^/\=expl/
+    1
 endfunction
 nmap <F1> :call Mydict()<CR>
 
@@ -583,3 +625,18 @@ nmap <F1> :call Mydict()<CR>
 
 "----- EasyMotion.vim 
 nmap ; H<Leader><Leader>w
+
+"----- Surround.vim 
+nmap <M-s> ysiw
+"nmap <M-S-s> ds
+
+"----- mru.vim most-recently-used files
+nmap <M-m> :MRU 
+
+"----- closetag.vim 
+"if (g:iswindows != 1)
+    "autocmd Filetype html,xml,eruby source ~/.vim/scripts/closetag.vim 
+"else
+    "autocmd Filetype html,xml,eruby source ~/.vim/scripts/closetag.vim
+"endif
+
