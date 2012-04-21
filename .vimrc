@@ -88,26 +88,26 @@ set spell
 setlocal spell spelllang=en_us
 
 "----- fcitx im input 
-let g:input_toggle = 1
-function! Fcitx2en()
-	let s:input_status = system("fcitx-remote")
-	if s:input_status == 2
-		let g:input_toggle = 1
-		let l:a = system("fcitx-remote -c")
-	endif
-endfunction
-function! Fcitx2zh()
-	let s:input_status = system("fcitx-remote")
-	if s:input_status != 2 && g:input_toggle == 1
-		let l:a = system("fcitx-remote -o")
-		let g:input_toggle = 0
-	endif
-endfunction
-set timeoutlen=150
-if has("autocmd")
-	autocmd InsertLeave * call Fcitx2en() "退出insert模式自动关闭
+"let g:input_toggle = 1
+"function! Fcitx2en()
+	"let s:input_status = system("fcitx-remote")
+	"if s:input_status == 2
+		"let g:input_toggle = 1
+		"let l:a = system("fcitx-remote -c")
+	"endif
+"endfunction
+"function! Fcitx2zh()
+	"let s:input_status = system("fcitx-remote")
+	"if s:input_status != 2 && g:input_toggle == 1
+		"let l:a = system("fcitx-remote -o")
+		"let g:input_toggle = 0
+	"endif
+"endfunction
+"set timeoutlen=150
+"if has("autocmd")
+	"autocmd InsertLeave * call Fcitx2en() "退出insert模式自动关闭
 	"autocmd InsertEnter * call Fcitx2zh() "进入insert模式自动开启
-endif 
+"endif 
 
 
 """"""""""""""""""""""""""""""
