@@ -67,10 +67,10 @@ set wrap "enable auto line wrap
 set linebreak "full-word wrap //breaks include " ^I!@*-+;:,./?" //list disables linebreak
 "set showbreak=…
 if g:isgui == 1
-	set listchars=tab:\|\ ,extends:»,precedes:« " 将制表符显示为'▸ >- ',将行尾空格显示为'¬'; 需要和 set list 配合使用
+	set listchars=tab:\│\ ,extends:»,precedes:« " 将制表符显示为'▸ >- ',将行尾空格显示为'¬'; 需要和 set list 配合使用
 	set list "show escaped制表符 //'tab' is shown (as: '^I' or 'listchars') //list disables linebreak
 else
-	set listchars=tab:\|\ ,extends:>,precedes:<  " 将制表符显示为'▸ >-',将行尾空格显示为'¬'; 需要和 set list 配合使用
+	set listchars=tab:\│\ ,extends:>,precedes:<  " 将制表符显示为'▸ >-',将行尾空格显示为'¬'; 需要和 set list 配合使用
 	set nolist
 endif
 nmap <Leader>l :set list!<CR>
@@ -79,7 +79,7 @@ set cursorline "highlight current line
 set cursorcolumn "highlight current column
 
 "------ state/status line bar
-set statusline=%M%f\ [%Y]%r%*%=\ %l,%c\ \|\ %p%%%L
+set statusline=%M\ %f\ [%Y]\ %r\ %*\ %=\ %l,%c\ \|\ %p%%%L
 set laststatus=2	" always show the status line
 set ruler			" 在编辑过程中，在右下角显示光标位置的状态行
 
@@ -134,23 +134,23 @@ nnoremap ,x :x<CR>
 nnoremap ,q :q<CR>
 nnoremap ,,q :q!<CR>
 nnoremap dw "_dw
-nnoremap tw "+dw
+nnoremap tw dw
 nnoremap dd "_dd
-nnoremap tt "+dd
+nnoremap tt dd
 vnoremap d "_d
-vnoremap t "+d
+vnoremap t d
 nnoremap D "_D
-nnoremap T "+D
+nnoremap T D
 vnoremap D "_D
-vnoremap T "+D
+vnoremap T D
 nnoremap x "_x
-nnoremap f "+x
+"nnoremap f x
 vnoremap x "_x
-vnoremap f "+x
+"vnoremap f x
 nnoremap X "_X
-nnoremap F "+X
+"nnoremap F X
 vnoremap X "_X
-vnoremap F "+X
+"vnoremap F X
 "nnoremap yy "+yy
 "vnoremap y "+y
 "nnoremap p "+gp
