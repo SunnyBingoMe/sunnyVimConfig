@@ -12,9 +12,9 @@ set ffs=unix,dos,mac "Default file types
 "Persistent undo
 try
 	if MySys() == "windows"
-	  set undodir=C:\Windows\Temp
+		set undodir=C:\Windows\Temp
 	else
-	  set undodir=~/.vim_runtime/undodir
+		set undodir=~/.vim_runtime/undodir
 	endif
 
 	set undofile
@@ -70,11 +70,16 @@ if g:isgui == 1
 	set listchars=tab:\│\ ,extends:»,precedes:« " 将制表符显示为'▸ >- ',将行尾空格显示为'¬'; 需要和 set list 配合使用
 	set list "show escaped制表符 //'tab' is shown (as: '^I' or 'listchars') //list disables linebreak
 else
-	set listchars=tab:\│\ ,extends:>,precedes:<  " 将制表符显示为'▸ >-',将行尾空格显示为'¬'; 需要和 set list 配合使用
+	set listchars=tab:\│\ ,extends:>,precedes:< " 将制表符显示为'▸ >-',将行尾空格显示为'¬'; 需要和 set list 配合使用
 	set nolist
 endif
 nmap <Leader>l :set list!<CR>
 set hidden			" 没有保存的缓冲区可以被隐藏
+
+
+"""""""""""""""""""""""""""""
+" Cursor related 
+"""""""""""""""""""""""""""""
 set cursorline "highlight current line
 set cursorcolumn "highlight current column
 
@@ -87,34 +92,43 @@ set ruler			" 在编辑过程中，在右下角显示光标位置的状态行
 set spell
 setlocal spell spelllang=en_us
 
-"----- fcitx im input 
-"let g:input_toggle = 1
-"function! Fcitx2en()
-	"let s:input_status = system("fcitx-remote")
-	"if s:input_status == 2
-		"let g:input_toggle = 1
-		"let l:a = system("fcitx-remote -c")
-	"endif
-"endfunction
-"function! Fcitx2zh()
-	"let s:input_status = system("fcitx-remote")
-	"if s:input_status != 2 && g:input_toggle == 1
-		"let l:a = system("fcitx-remote -o")
-		"let g:input_toggle = 0
-	"endif
-"endfunction
-"set timeoutlen=150
-"if has("autocmd")
-	"autocmd InsertLeave * call Fcitx2en() "退出insert模式自动关闭
-	"autocmd InsertEnter * call Fcitx2zh() "进入insert模式自动开启
-"endif 
+"----- cursor: Disable all blinking:
+":set guicursor+=a:blinkon0
+
+"----- mode cursor color 
+let color_normal = 'HotPink'
+let color_insert = 'RoyalBlue1'
+let color_exit = 'green'
+if &term =~ 'xterm\|rxvt'
+	exe 'silent !echo -ne "\e]12;"' . shellescape(color_normal, 1) . '"\007"'
+	let &t_SI="\e]12;" . color_insert . "\007"
+	let &t_EI="\e]12;" . color_normal . "\007"
+	exe 'autocmd VimLeave * :!echo -ne "\e]12;"' . shellescape(color_exit, 1) . '"\007"'
+elseif &term =~ "screen"
+	if !exists('$SUDO_UID')
+		if exists('$TMUX')
+			exe 'silent !echo -ne "\033Ptmux;\033\e]12;"' . shellescape(color_normal, 1) . '"\007\033\\"'
+			let &t_SI="\033Ptmux;\033\e]12;" . color_insert . "\007\033\\"
+			let &t_EI="\033Ptmux;\033\e]12;" . color_normal . "\007\033\\"
+			exe 'autocmd VimLeave * :!echo -ne "\033Ptmux;\033\e]12;"' . shellescape(color_exit, 1) . '"\007\033\\"'
+		else
+			exe 'silent !echo -ne "\033P\e]12;"' . shellescape(color_normal, 1) . '"\007\033\\"'
+			let &t_SI="\033P\e]12;" . color_insert . "\007\033\\"
+			let &t_EI="\033P\e]12;" . color_normal . "\007\033\\"
+			exe 'autocmd VimLeave * :!echo -ne "\033P\e]12;"' . shellescape(color_exit, 1) . '"\007\033\\"'
+		endif
+	endif
+endif
+unlet color_normal
+unlet color_insert
+unlet color_exit
 
 
 """"""""""""""""""""""""""""""
 " => Visual mode related
 """"""""""""""""""""""""""""""
 " Really useful!
-"  In visual mode when you press * or # to search for the current selection
+" In visual mode when you press * or # to search for the current selection
 vnoremap <silent> * :call VisualSearch('f')<CR>
 vnoremap <silent> # :call VisualSearch('b')<CR>
 
@@ -203,7 +217,7 @@ nmap <S-F3> :.s/\w*/\u&/<CR>/OK.OK.OK.<CR>
 nmap <Leader><Space><CR> :.s/ //<CR>/OK.OK.OK.<CR>
 
 "=================================================
-" auto-pair-close 括号自动智能位置补全, 闭括号重复性检测,  http://is.gd/hqJp0L
+" auto-pair-close 括号自动智能位置补全, 闭括号重复性检测, http://is.gd/hqJp0L
 "=================================================
 :inoremap <S-ENTER> <c-r>=SkipPair()<CR>
 :inoremap <S-SPACE> <ESC>la
@@ -299,8 +313,8 @@ set ai!				" 自动缩进
 
 "-------代码折叠 : za, zM(Minimize all), zR(Restore all)
 :nnoremap <space> za
-"set foldlevel=3	   " when start, default level to start fold
-set foldcolumn=4	   "在左侧显示缩进的层次
+"set foldlevel=3 " when start, default level to start fold
+set foldcolumn=4 "在左侧显示缩进的层次
 "set foldmarker={,}
 "set foldmethod=marker
 "set foldmethod=syntax "grammer
