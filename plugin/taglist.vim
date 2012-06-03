@@ -2264,8 +2264,7 @@ function! s:Tlist_Process_File(filename, ftype)
         set noshellslash
     endif
 
-    if has('win32') && !has('win32unix') && !has('win95')
-                \ && (&shell =~ 'cmd.exe')
+    if 0
         " Windows does not correctly deal with commands that have more than 1
         " set of double quotes.  It will strip them all resulting in:
         " 'C:\Program' is not recognized as an internal or external command
@@ -2284,6 +2283,11 @@ function! s:Tlist_Process_File(filename, ftype)
     endif
 
     call s:Tlist_Log_Msg('Cmd: ' . ctags_cmd)
+
+    "win32 need pass 'cp936' characters to cmd.
+    if has('win32') && !has('win32unix') && (&enc != 'cp936')
+	    let ctags_cmd = iconv(ctags_cmd, &enc, "cp936")
+    endif
 
     " Run ctags and get the tag list
     let cmd_output = system(ctags_cmd)

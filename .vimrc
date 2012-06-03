@@ -1,5 +1,5 @@
 "u could also source this file at the end of /etc/vim/vimrc, but the functions have to be endded like function!
-"sunny vim config v2012.1.1
+"sunny vim config v2012.4.25
 "admin@SunnyBoy.me
 "main ref:http://bit.ly/vyRuFd
 
@@ -41,7 +41,7 @@ set encoding=utf-8
 set helplang=en
 
 if has("autocmd") "if this version of vim support autocmd
-	autocmd BufEnter *	silent!lcd %:p:h "local pwd
+	autocmd BufEnter * silent! lcd %:p:h "local pwd
 	"autocmd BufEnter * silent! cd %:p:h "global pwd
 	autocmd BufWinEnter * silent! loadview
 	autocmd BufWinEnter * silent! set list
@@ -82,6 +82,7 @@ set hidden			" 没有保存的缓冲区可以被隐藏
 """""""""""""""""""""""""""""
 set cursorline "highlight current line
 set cursorcolumn "highlight current column
+set t_ve+=[?81;0;112c
 
 "------ state/status line bar
 set statusline=%M\ %f\ [%Y]\ %r\ %*\ %=\ %l,%c\ \|\ %p%%%L
@@ -93,12 +94,12 @@ set spell
 setlocal spell spelllang=en_us
 
 "----- cursor: Disable all blinking:
-":set guicursor+=a:blinkon0
+:set guicursor=a:blinkon0
 
 "----- mode cursor color 
 let color_normal = 'HotPink'
-let color_insert = 'RoyalBlue1'
-let color_exit = 'green'
+let color_insert = 'green' "'RoyalBlue1'
+let color_exit = 'white' "'green'
 if &term =~ 'xterm\|rxvt'
 	exe 'silent !echo -ne "\e]12;"' . shellescape(color_normal, 1) . '"\007"'
 	let &t_SI="\e]12;" . color_insert . "\007"
@@ -129,11 +130,11 @@ unlet color_exit
 """"""""""""""""""""""""""""""
 " Really useful!
 " In visual mode when you press * or # to search for the current selection
-vnoremap <silent> * :call VisualSearch('f')<CR>
-vnoremap <silent> # :call VisualSearch('b')<CR>
+"vnoremap <silent> * :call VisualSearch('f')<CR>
+"vnoremap <silent> # :call VisualSearch('b')<CR>
 
 " When you press gv you vimgrep after the selected text
-vnoremap <silent> gv :call VisualSearch('gv')<CR>
+"vnoremap <silent> gv :call VisualSearch('gv')<CR>
 map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
 
 
@@ -165,8 +166,8 @@ nnoremap X "_X
 "nnoremap F X
 vnoremap X "_X
 "vnoremap F X
-"nnoremap yy "+yy
-"vnoremap y "+y
+nnoremap yy "+yy
+vnoremap y "+y
 "nnoremap p "+gp
 "nnoremap P "+gP
 nnoremap s "_s
@@ -195,13 +196,13 @@ nmap <C-4> g$
 nmap <C-6> g^
 nmap <C-0> g^
 "select all
-nnoremap <C-a> ggvG
+nnoremap <C-a> ggVG
 inoremap <C-a> <Esc>ggvG
 nnoremap <C-z> u
 inoremap <C-z> <Esc>ua
 "vmap <C-S-c> "+y
 "vmap <C-S-x> "+x
-imap <C-v> <S-INS>
+"imap <C-v> <S-INS>
 "-----arrows and home, end. seems not available in guake 
 inoremap <M-h> <Left>
 inoremap <M-l> <Right>
@@ -320,6 +321,7 @@ set foldcolumn=4 "在左侧显示缩进的层次
 "set foldmethod=syntax "grammer
 "set foldmethod=diff "fold non-changed code
 set foldmethod=indent
+autocmd BufEnter * silent! set foldignore=''
 "set foldopen-=search	" don't auto-open folds when search into
 "set foldopen-=undo		" don't auto-open folds when undo stuff
 
