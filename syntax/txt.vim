@@ -29,14 +29,12 @@ syn keyword txtError ERR WARNING EE WW II error bug caution dropped
 
 "txtComment: Lines that start with '#'
 "以#号打头的行为注释文本
-syn match   txtComment '#[^#]\+$' contains=txtTodo
+syn match   txtComment ' #[^#]\+$' contains=txtTodo
 
 "txtTitle: Lines start with digit and '.'
 "标题文本: 前面有任意个空格,数字.[数字.]打头, 并且该行里不含有,.。，等标点符号
 "
 syn match txtTitle "^\s*\(\d\+ \)\+\s*"
-syn match txtTitle "^\s*\(\d\+ \)\+\s*"
-
 syn match txtTitle "^\s*\(\d\+\.\)\+\d*\s*"
 
 "txtTitle: Lines start with Chinese digit and '.'
